@@ -1,0 +1,5 @@
+# Zipped as bytecode by cpython's StageStdlib plugin. Tk, Qt and Windows have no
+# place here.
+# source: src
+PIL
+-PIL/ImageTk.py -PIL/_tkinter_finder.py -PIL/ImageQt.py -PIL/ImageWin.py

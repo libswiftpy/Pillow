@@ -1,0 +1,4 @@
+module Cjpeg {
+    header "Cjpeg.h"
+    export *
+}
