@@ -7,9 +7,7 @@ import PackageDescription
 // most, and 0.7 of Python. Compiled against CPython's Swift/Headers, so it follows
 // whichever cpython checkout it builds with.
 let packageDirectory = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-let cpythonOverride = ProcessInfo.processInfo.environment["SWIFTPY_CPYTHON_PATH"]
-let cpythonPath = URL(fileURLWithPath: cpythonOverride ?? "../cpython", relativeTo: packageDirectory)
-    .standardizedFileURL.path
+let cpythonPath = packageDirectory.deletingLastPathComponent().appendingPathComponent("cpython").path
 
 let pythonHeaders: [CSetting] = [
     .unsafeFlags([
@@ -25,8 +23,7 @@ let package = Package(
         .library(name: "PIL", targets: ["PIL"]),
     ],
     dependencies: [
-        cpythonOverride.map { .package(path: $0) }
-            ?? .package(url: "https://github.com/libswiftpy/cpython.git", exact: "3.15.2-swiftpy.2"),
+        .package(path: "../cpython"),
     ],
     targets: [
         // JPEG, FreeType and WebP, from Swift/stage-vendor.sh, which only an update needs.
