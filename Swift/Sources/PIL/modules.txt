@@ -1,4 +1,4 @@
-# Zipped as bytecode by cpython's StageStdlib plugin. Tk, Qt and Windows have no
+# Zipped as bytecode by cpython's Swift/stage.sh. Tk, Qt and Windows have no
 # place here.
 # source: src
 PIL

@@ -4,7 +4,7 @@ import PackageDescription
 
 // Pillow as a Swift package: PIL's C modules built in, the Python package as
 // bytecode in a zip. Adds about 7.2 MB to an iOS app: 6.5 of code, FreeType the
-// most, and 0.7 of Python. Compiled against CPython's staged headers, so it follows
+// most, and 0.7 of Python. Compiled against CPython's Swift/Headers, so it follows
 // whichever cpython checkout it builds with.
 let packageDirectory = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
 let cpythonOverride = ProcessInfo.processInfo.environment["SWIFTPY_CPYTHON_PATH"]
@@ -12,13 +12,11 @@ let cpythonPath = URL(fileURLWithPath: cpythonOverride ?? "../cpython", relative
     .standardizedFileURL.path
 
 let pythonHeaders: [CSetting] = [
-    (".cpython-dist", Platform.macOS), (".cpython-dist-iphoneos", .iOS), (".cpython-dist-xros", .visionOS),
-].map { dist, platform in
     .unsafeFlags([
-        "-I\(cpythonPath)/Swift/\(dist)/include/python",
-        "-I\(cpythonPath)/Swift/\(dist)/include/python/internal",
-    ], .when(platforms: [platform]))
-}
+        "-I\(cpythonPath)/Swift/Headers/python",
+        "-I\(cpythonPath)/Swift/Headers/python/internal",
+    ]),
+]
 
 let package = Package(
     name: "Pillow",
@@ -126,7 +124,7 @@ let package = Package(
             dependencies: [.product(name: "PythonModules", package: "cpython"), "CPIL"],
             path: "Swift/Sources/PIL",
             exclude: ["modules.txt"],
-            plugins: [.plugin(name: "StageStdlib", package: "cpython")]
+            resources: [.copy("PIL.zip")]
         ),
         .testTarget(
             name: "PILTests",
